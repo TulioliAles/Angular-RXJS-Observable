@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,51 @@ import { Component } from '@angular/core';
   `,
   styles: []
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'AngularRXJSObservable';
+  
+  //Exemplo Promise
+  // minhaPromise(nome: string) : Promise<string>{
+  //   return new Promise((resolve, rejects) => {
+  //     if(nome === 'Alessandro'){
+  //       setTimeout(() => {
+  //         resolve('Seja bem vindo ' + nome)
+  //       }, 1000);
+  //     }
+  //     else{
+  //       rejects('Ops! Você não é Alessandro.')
+  //     }
+  //   })
+  // }
+
+  //Exemplo Execução Promise
+  // ngOnInit(): void {
+  //   this.minhaPromise('Pedro')
+  //   .then(result => console.log(result))
+  //   .catch(erro => console.log(erro));
+  // }
+
+   //Exemplo Observable
+   minhaObservable(nome: string) : Observable<string>{
+    return new Observable(subscriber => {
+      if(nome === 'Alessandro'){
+        subscriber.next('Olá ' + nome)
+        subscriber.next('Olá de novo ' + nome)
+        setTimeout(() => {
+          subscriber.next('Resposta com Delay - Nome: ' + nome)
+        }, 5000);
+      }
+      else{
+        subscriber.error('Ops! Deu erro.')
+      }
+    })
+  }
+
+  //Exemplo Execução Observable
+  ngOnInit(): void {
+    this.minhaObservable('Alessandro')
+    .subscribe(
+      result => console.log(result),
+      erro => console.log(erro));
+  }
 }
